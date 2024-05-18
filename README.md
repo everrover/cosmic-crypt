@@ -111,5 +111,47 @@ Sections
 
 - Dynamic Link Library :: Can't run on its own, needs an exe to import and use it
 - `ntdll.dll`, `kernel32.dll`, etc
-- A common DLL will be used by many processes, so it's loaded into memory only once
+- A common DLL will be used by many processes, so it's loaded into memory only once.
+  - System-wide DLLs and libs
+  - Process-specific DLLs and libs
 
+(Nothin' I didn't know)
+
+### Detection mechanisms and evasion techniques
+
+- Static signature-based detection - Hashing, pattern matching, etc
+  - Evasion via modding shellcode -> obfuscation, hashing, etc
+- Heuristic-based detection 
+  - Decompiling and signature matching - static
+  - Behavioural-based detection - dynamic
+- Behaviour-based detection - Monitoring system calls, network traffic, etc - Monitored in sandbox
+  - Evasion via modding behaviour -> sleep, delay, parallel-exec, re-ordering op to match some genuine app's behaviour, etc
+- API hooking - Monitoring commonly used APIs
+  - Evasion via modding API call patterns -> hooking, detouring, etc
+  - IAT checks - Import Address Table checks
+    - Evasion via **API hashing and obfuscation?**
+
+### Windows Process
+
+- Process, Threads, Memory
+- M/M
+  - Virtual and physical
+  - Types
+    - Private - process-specific
+    - Shared/Mapped - shared between processes - restricts W
+    - Image - executable file
+- PEB(Process Environment Block)
+  - Process info, m/m info, etc
+  - Imp flags(name is diff in Rust)
+    - BeingDebugged - Is debugger attached?
+    - Ldr(`_PEB_LDR_DATA`) - List of .dll dependencies. These PIDs can be found and the .dll's modified to load malicious shellcode and threads
+    - ProcessParameters(`RTL_USER_PROCESS_PARAMETERS`) - List of args passed to process - can be modified to load malicious shellcode or specific paths/params
+    - `PostProcessInitRoutine` - Callback that runs after all threads and process init completes
+    - `AtlThunkSListPtr` - Pointer to ATL thunk list
+    - `SessionId` - Session ID per process per user used for **Tracking user activity**
+- TEB(Thread Environment Block)
+  - Thread info, m/m info, etc
+  - Imp flags
+    - `TlsSlots` - Thread Local Storage slots - thread specific data
+    - `TlsExpansionSlots` - Expansion slots for TLS - thread specific data for associated .dll's
+- Closing handles(of either process or thread) is essential to avoid memory leaks
