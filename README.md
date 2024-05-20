@@ -75,6 +75,8 @@ use winapi::um::winuser; // For WinAPI - Rust
 
 ### PE format
 
+https://itehax.com/blog/portable-executable-explained-throught-rust-code
+
 Generally speaking, a PE file is format used by programmes and dependencies.
 **General format** :: Changes depending on OS, compiler, etc
 
@@ -155,3 +157,66 @@ Sections
     - `TlsSlots` - Thread Local Storage slots - thread specific data
     - `TlsExpansionSlots` - Expansion slots for TLS - thread specific data for associated .dll's
 - Closing handles(of either process or thread) is essential to avoid memory leaks
+
+### Using un-official docs and sources
+
+> One may encounter several reserved members within the structure. These reserved members are often presented as arrays 
+> of BYTE or PVOID data types. This practice is implemented by Microsoft to maintain confidentiality and prevent users
+> from understanding the structure to avoid modifications to these reserved members.
+
+👆👆 for Linux and other OS's
+
+[undocumented.ninternals](https://web.archive.org/web/20230401045934/http://undocumented.ntinternals.net/)
+[Process hacker](https://github.com/winsiderss/systeminformer/tree/master/phnt/include)
+[ReactOSs docs](https://doxygen.reactos.org/globals_type.html)
+[Vergilius project](https://www.vergiliusproject.com/)
+
+- Remember m/c arch x64/x86/ARM/etc. specific defn.s may be used
+- These defn.s have to be implemented ourselves at times, at times have to be imported specifically
+- Multiple defn.s or custom defn.s may be used for the same structure, and have to be specifically imported/created
+
+### Payload inclusion
+
+- Several sections available in a PE file
+  - `.text` - Code
+    - Specific instructions have to be provided
+    - `-x` permission applicable on data stored in this section
+    - Allows shellcode to be run directly here
+    - Limited space
+```rust
+extern crate winapi;
+
+use winapi::um::memoryapi::{VirtualAlloc};
+use winapi::um::winnt::{PAGE_EXECUTE_READWRITE, MEM_COMMIT, MEM_RESERVE};
+use std::mem::transmute;
+
+fn main() {
+    // Define the shellcode
+    let shellcode: [u8; 5] = [0x90, 0x90, 0x90, 0x90, 0xC3]; // Replace with your shellcode
+
+    // Allocate memory for the shellcode
+    let mem = unsafe {
+        VirtualAlloc(
+            std::ptr::null_mut(),
+            shellcode.len(),
+            MEM_COMMIT | MEM_RESERVE,
+            PAGE_EXECUTE_READWRITE,
+        )
+    };
+
+    // Copy the shellcode into the newly allocated memory
+    unsafe {
+        std::ptr::copy_nonoverlapping(shellcode.as_ptr(), mem as *mut u8, shellcode.len());
+    }
+
+    // Cast the pointer to a function pointer and call it
+    let func: extern "system" fn() = unsafe { transmute(mem) };
+    func();
+}
+```
+  - `.data` - Data - R/W
+    - contains global and static vars
+    - store shell code(encrypted, obfuscated, etc) and decrypt it at runtime
+  - `.rdata` - Read-only data `const`
+    - `.rdata` and `.data` are merged in some cases within `.data` or even `.text`
+  - `.rsrc` - Resources
