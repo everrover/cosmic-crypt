@@ -193,7 +193,7 @@ use std::mem::transmute;
 fn main() {
     // Define the shellcode
     let shellcode: [u8; 5] = [0x90, 0x90, 0x90, 0x90, 0xC3]; // Replace with your shellcode
-
+  
     // Allocate memory for the shellcode
     let mem = unsafe {
         VirtualAlloc(
@@ -220,3 +220,11 @@ fn main() {
   - `.rdata` - Read-only data `const`
     - `.rdata` and `.data` are merged in some cases within `.data` or even `.text`
   - `.rsrc` - Resources
+
+### Kali m/c
+
+```
+hostname: kali
+username: goku
+password: vegetam3
+```
