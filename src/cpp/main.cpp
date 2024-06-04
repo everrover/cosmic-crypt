@@ -110,17 +110,21 @@ using namespace std;
  * 
  * Store a file in .rsrc section with a resource type and name, but contents of your payload
  * 
+ * Similarly diff sections can be used to store diff types of data with diff permissions within the PE file
+ * 
  */
 
-#include "resourceimport.h"
+// #include "resourceimport.h"
 
 int main() {
 	cout << "[i] Starting main..." << endl;
 	// dataSectionTests();
 	// rdataSectionTests();
 	// textSectionTests();
-	importResource("TEXTFILE", "icon.ico");
-	cin.get(); // check via PE-Bear/dumpbin.exe
+	// importResource("TEXTFILE", "icon.ico");
+	// cin.get(); // check via PE-Bear/dumpbin.exe
+
+	
 	
   return 0;
 }
