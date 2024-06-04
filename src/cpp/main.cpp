@@ -84,27 +84,43 @@ using namespace std;
 // }
 
 // instucted compiler to allocate this payload in .text section
-#pragma section(".text")
-__declspec(allocate(".text")) unsigned char Payload[] = {
-	0xFC, 0x48, 0x83, 0xE4, 0xF0, 0xE8, 0xC0, 0x00, 0x00, 0x00, 0x41, 0x51,	
-};
+// #pragma section(".text")
+// __declspec(allocate(".text")) unsigned char Payload[] = {
+// 	0xFC, 0x48, 0x83, 0xE4, 0xF0, 0xE8, 0xC0, 0x00, 0x00, 0x00, 0x41, 0x51,	
+// };
 
-void textSectionTests() {
-	/**
-	 * Text section tests
-	 * > dumpbin.exe /ALL <binfile.exe> # check .text section
-	 * .text section has memory protection of PAGE_EXECUTE_READWRITE, hence allows execution
-	 * no req to edit memory regions for access
-	 * not suitable for larger payloads
-	 */
-	cout << "[i] Payload size: " << sizeof(Payload) << endl;
-	cout << "[i] Payload: " << Payload << endl;
-	cin.get();
-}
+// void textSectionTests() {
+// 	/**
+// 	 * Text section tests
+// 	 * # check .text section in PE-Bear
+// 	 * .text section has memory protection of PAGE_EXECUTE_READWRITE, hence allows execution
+// 	 * no req to edit memory regions for access
+// 	 * not suitable for larger payloads
+// 	 */
+// 	cout << "[i] Payload size: " << sizeof(Payload) << endl;
+// 	cout << "[i] Payload: " << Payload << endl;
+// 	cin.get();
+// }
+
+// ---
+
+/**
+ * .rsrc section
+ * It's basically a resource section based import. 
+ * 
+ * Store a file in .rsrc section with a resource type and name, but contents of your payload
+ * 
+ */
+
+#include "resourceimport.h"
 
 int main() {
 	cout << "[i] Starting main..." << endl;
 	// dataSectionTests();
 	// rdataSectionTests();
+	// textSectionTests();
+	importResource("TEXTFILE", "icon.ico");
+	cin.get(); // check via PE-Bear/dumpbin.exe
+	
   return 0;
 }
