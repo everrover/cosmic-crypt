@@ -1,5 +1,7 @@
 # cosmic-crypt
 
+https://www.freecodecamp.org/news/how-to-install-c-and-cpp-compiler-on-windows/
+
 **Malware dev repository - Just the basics - And just for fun**
 [Discord](https://discord.gg/CxjUAnVh8g)
 
