@@ -44,40 +44,76 @@ string xordecrypt(string data, string key) {
 
 void xorpayloadencryption(){
   string key = "password";
+  
   string encrypted = xorencrypt(string((char*)Data_RawData, sizeof(Data_RawData)), key);
   cout << "[i] Encrypted size: " << encrypted.size() << endl;
   cout << "[i] Encrypted: " << encrypted << endl;
+
   string decrypted = xordecrypt(encrypted, key);
   cout << "[i] Decrypted size: " << decrypted.size() << endl;
   cout << "[i] Decrypted: " << decrypted << endl;
+
+  cout << "[i] Press any key to continue..." << endl;
   cin.get();
 }
 
-string rc4encrypt(string data, string key) {
-  string output = data;
-  int x = 0;
-  int y = 0;
-  unsigned char s[256];
-  for (int i = 0; i < 256; i++) {
-    s[i] = i;
-  }
-  for (int i = 0; i < 256; i++) {
-    y = (key[i % key.size()] + s[i] + y) % 256;
-    swap(s[i], s[y]);
-  }
-  for (int i = 0; i < data.size(); i++) {
-    x = (x + 1) % 256;
-    y = (s[x] + y) % 256;
-    swap(s[x], s[y]);
-    output[i] = data[i] ^ s[(s[x] + s[y]) % 256];
-  }
-  return output;
-}
+class Rc4Context {
+  public:
+    string s, key;
+    int slen, x, y; // x, y are the indexes of the s array
 
-string rc4decrypt(string data, string key) {
-  return rc4encrypt(data, key);
-}
+    Rc4Context(string key) {
+      x = 0;
+      y = 0;
+      s = string(256, 0);
+      slen = 256;
+      key = key;
+      for (int i = 0; i < 256; i++) {
+        s[i] = i;
+      }
+      for(int i=0, j=0; i < 256; i++) {
+        j = (j + s[i] + key[i % key.size()]) % 256;
+        swap(s[i], s[j]);
+      }
+    }
 
-string rc4payloadencryption() {
+    void rc4cipher(string input, string output, int size) {
+      if(input.length() == 0 || output.length() == 0 || size == 0) {
+        return;
+      }
+      char temp;
+      for (int i = 0; i < size/2; i++) {
+        x = (x + 1) % 256;
+        y = (s[x] + y) % 256;
+        swap(s[x], s[y]);
+        temp = s[(s[x] + s[y]) % 256];
+        output[i] = input[i] ^ temp;
+      }
+    }
 
+    string encrypt(string plaintext) {
+      string ciphertext = string(plaintext.length(), 0);
+      rc4cipher(plaintext, ciphertext, plaintext.length());
+      return ciphertext;
+    }
+
+    string decrypt(string ciphertext) {
+      return encrypt(ciphertext);
+    }
+};
+
+void rc4payloadencryption() {
+  string key = "maldevbabe"; // ofcourse this key needs to be obfuscated
+  Rc4Context rc4(key);
+
+  string encrypted = rc4.encrypt(string((char*)Data_RawData, sizeof(Data_RawData)));
+  cout << "[i] Encrypted size: " << encrypted.size() << endl;
+  cout << "[i] Encrypted: " << encrypted << endl;
+  
+  string decrypted = rc4.decrypt(encrypted);
+  cout << "[i] Decrypted size: " << decrypted.size() << endl;
+  cout << "[i] Decrypted: " << decrypted << endl;
+
+  cout << "[i] Press any key to continue..." << endl;
+  cin.get();
 }

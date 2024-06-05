@@ -1,5 +1,7 @@
 # cosmic-crypt
 
+‼️Windows or any other OS will attempt to flag this repo as malicious. Please use a VM or a sandbox to run this code after hardening. Above all, use it at your own risk.‼️
+
 **Malware dev repository - Just the basics - And just for fun**
 [Discord](https://discord.gg/CxjUAnVh8g)
 

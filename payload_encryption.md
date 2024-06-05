@@ -7,7 +7,27 @@ https://www.freecodecamp.org/news/how-to-install-c-and-cpp-compiler-on-windows/
 
 - XOR encryption
 - AES encryption
+  /*
+   * 
+   * Using AES here ... AES128, AES192, AES256, etc.
+   * * Symmetric encryption - same key for both encryption and decryption
+   * * Block cipher modes possible - ECB, GCM, etc. - Needs init. vector(IV)
+   * * Key exchange required
+   * * Used `bCrypt` and `Tiny Aes Project` libraries
+   * 
+   * [Most commonly used]
+   */
 - RC4 encryption
+  /*
+   * 
+   * Using RC4 here ...
+   * * Fast, bidirectional stream cipher
+   * * Doesn't require a key exchange/any other overhead
+   * 
+   * [Now obsolete]
+   */
+
+
 
 Similar techniques
 
