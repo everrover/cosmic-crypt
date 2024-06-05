@@ -5,9 +5,28 @@
 **Malware dev repository - Just the basics - And just for fun**
 [Discord](https://discord.gg/CxjUAnVh8g)
 
-## INDEX
+## Table of contents
 
+- [General info](./README.md)
 - [Payload encryption](./payload_encryption.md)
+- [Payload obfuscation](./payload_obfuscation.md)
+- 
+
+### Kali m/c
+
+```
+hostname: kali
+username: goku
+password: vegetam3
+```
+
+### Windows m/c
+
+```
+hostname: mando
+username: mandolorian
+password: babyYoda❌
+```
 
 ### What I already know
 
@@ -227,10 +246,25 @@ fn main() {
     - `.rdata` and `.data` are merged in some cases within `.data` or even `.text`
   - `.rsrc` - Resources
 
+## Table of contents
+
+- [General info](./README.md)
+- [Payload encryption](./payload_encryption.md)
+- [Payload obfuscation](./payload_obfuscation.md)
+- 
+
 ### Kali m/c
 
 ```
 hostname: kali
 username: goku
 password: vegetam3
+```
+
+### Windows m/c
+
+```
+hostname: mando
+username: mandolorian
+password: babyYoda❌
 ```
