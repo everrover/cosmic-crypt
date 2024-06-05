@@ -117,3 +117,30 @@ void rc4payloadencryption() {
   cout << "[i] Press any key to continue..." << endl;
   cin.get();
 }
+
+class AESContext {
+  public:
+    string key, plaintext, ciphertext, iv;
+    AESContext(string key, string plaintext, string iv) {
+      key = key;
+      plaintext = plaintext;
+      iv = iv;
+    }
+
+    boolean encrypt() {
+      
+      return true;
+    }
+
+    string encrypt(string plaintext) {
+      return plaintext;
+    }
+
+    string decrypt(string ciphertext) {
+      return ciphertext;
+    }
+};
+
+void aespayloadencryption(){
+
+}
